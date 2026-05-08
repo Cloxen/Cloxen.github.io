@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Médicas de Occidente</title>
+<title>VitalMedic de Occidente</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
 
@@ -14,521 +14,334 @@ body {
   background: #eef2f0;
 }
 
+/* LOGIN */
+.login-bar{
+  position:fixed;
+  top:-100px;
+  left:50%;
+  transform:translateX(-50%);
+  background: linear-gradient(90deg,#2e6e3a,#4f9b61);
+  padding:10px;
+  border-radius:30px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  transition:0.4s;
+  z-index:9999;
+}
+
+.login-bar.show{ top:80px; }
+
+.login-bar input{
+  padding:6px;
+  border-radius:20px;
+  border:none;
+}
+
+.login-bar button{
+  background:white;
+  border:none;
+  border-radius:20px;
+  padding:6px 12px;
+  cursor:pointer;
+}
+
+.close-login{
+  background:red;
+  color:white;
+  border:none;
+  border-radius:50%;
+  width:25px;
+  height:25px;
+  cursor:pointer;
+}
+
 /* HEADER */
 .header {
-  position: relative;
-  background: #2e6e3a;
-  color: white;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background:#2e6e3a;
+  color:white;
+  padding:15px;
+  text-align:center;
 }
 
 .header h2 {
   font-family: 'Playfair Display', serif;
 }
 
-/* MENU CENTRADO */
-.menu {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-}
-
-.menu button {
-  background: #4f9b61;
-  border: none;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-.menu button.activo {
-  background: white;
-  color: #2e6e3a;
-}
-
-/* CARRITO */
-.carrito-btn {
-  background: white;
-  color: #2e6e3a;
-  padding: 6px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
 /* BANNER */
-.banner {
-  position: relative;
-}
-
-.banner img {
-  width: 100%;
-  display: block;
-}
+.banner { position: relative; }
+.banner img { width:100%; display:block; }
 
 /* FARMACÉUTICO */
 .farma-widget {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
+  position:absolute;
+  left:20px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
 
 .farma-img {
-  width: 90px;
-  max-width: 90px;
-  min-width: 90px;
-  height: auto;
-  display: block;
-  flex-shrink: 0;
-  animation: floatOnly 3s ease-in-out infinite;
+  width:80px !important;
+  max-width:80px !important;
+  min-width:80px !important;
+  height:auto;
+  object-fit:contain;
 }
 
+/* BURBUJA */
 .speech {
-  position: relative;
-  background: white;
-  padding: 10px;
-  border-radius: 12px;
-  width: 180px;
-  height: 55px;
-  font-size: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.speech::after {
-  content: "";
-  position: absolute;
-  left: -10px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 10px solid transparent;
-  border-right-color: white;
-}
-
-@keyframes floatOnly {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+  background:white;
+  padding:8px;
+  border-radius:10px;
+  width:140px;
+  height:45px;
+  font-size:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 /* PRODUCTOS */
 .productos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
-  gap: 20px;
-  padding: 20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+  padding:20px;
 }
 
 .card {
-  background: white;
-  border-radius: 15px;
-  padding: 15px;
-  text-align: center;
+  background:white;
+  border-radius:15px;
+  padding:15px;
+  text-align:center;
 }
 
 .card img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
+  width:100%;
+  height:160px;
+  object-fit:cover;
 }
 
-/* TOAST */
-.toast-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
+.precio { color:#2e6e3a; font-weight:bold; }
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="login-bar" id="loginBox">
+  <input id="email" placeholder="Correo vendedor">
+  <input id="password" type="password" placeholder="Contraseña">
+  <button onclick="loginFirebase()">Ingresar</button>
+  <button class="close-login" onclick="cerrarLogin()">✖</button>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <h2>🌿 VitalMedic de Occidente</h2>
+</div>
+
+<!-- BANNER -->
+<div class="banner" onclick="activarLogin()">
+  <div class="farma-widget">
+    <img src="farmaceuta.png" class="farma-img">
+    <div class="speech" id="farma-text">¿En qué puedo ayudarte?</div>
+  </div>
+  <img src="imagen.png">
+</div>
+
+<!-- PRODUCTOS -->
+<div class="productos" id="productos"></div>
+
+<script>
+// PRODUCTOS
+let productos=[
+{nombre:"Proteína Natural",precio:25,img:"wheyprot.jpg"},
+{nombre:"Ben 10 Malteada",precio:18,img:"ben10.jpg"},
+{nombre:"Citrato de Magnesio",precio:12,img:"citratom.jpg"},
+{nombre:"Citrato de Potasio",precio:15,img:"citratop.jpg"},
+{nombre:"Calsumag",precio:10,img:"calsumag.jpg"}
+];
+
+function render(){
+let cont=document.getElementById("productos");
+cont.innerHTML="";
+productos.forEach(p=>{
+cont.innerHTML+=`
+<div class="card">
+<img src="${p.img}">
+<h3>${p.nombre}</h3>
+<p class="precio">$${p.precio}</p>
+<p>Disponible</p>
+</div>`;
+});
 }
+render();
 
-.toast {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #2e6e3a;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  min-width: 250px;
-  opacity: 0;
-  transform: translateX(100%);
-  transition: 0.4s;
+// FARMACÉUTICO
+const preguntas=[
+"¿Qué síntoma tienes?",
+"Te ayudamos a elegir el mejor producto",
+"Consulta con nuestros asesores"
+];
+
+let i=0;
+const text=document.getElementById("farma-text");
+
+function nextQuestion(){
+text.textContent=preguntas[i];
+i++;
+if(i<preguntas.length){
+setTimeout(nextQuestion,3000);
 }
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(0);
 }
+setTimeout(nextQuestion,2000);
 
-.toast img {
-  width: 45px;
-  height: 45px;
-  border-radius: 8px;
-}
+// LOGIN
+let clicks = 0;
 
-/* OVERLAY */
-.overlay {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  z-index: 10;
-}
-
-.overlay.activo {
-  display: block;
-}
-
-/* CARRITO */
-.panel-carrito {
-  position: fixed;
-  right: -400px;
-  top: 0;
-  width: 360px;
-  height: 100%;
-  background: #1f1f1f;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  transition: 0.3s;
-  z-index: 20;
-}
-
-.panel-carrito.activo {
-  right: 0;
-}
-
-.cerrar-carrito {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.contenido-carrito {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px;
-}
-
-.item-carrito {
-  display: flex;
-  gap: 10px;
-  background: #2c2c2c;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-/* IMÁGENES CARRITO */
-.item-carrito img {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-/* FOOTER */
-.footer-carrito {
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* BOTONES CARRITO */
-.finalizar {
-  background: #25D366;
-  padding: 15px;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.vaciar {
-  background: red;
-  padding: 10px;
-  border: none;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-/* =========================
-📱 RESPONSIVE MOBILE
-========================= */
-@media (max-width: 768px) {
-
-  /* HEADER */
-  .header {
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
+function activarLogin(){
+  clicks++;
+  if(clicks >= 3){
+    loginBox.classList.add("show");
+    clicks = 0;
   }
-
-  /* MENU */
-  .menu {
-    position: static;
-    transform: none;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  /* BOTÓN CARRITO */
-  .carrito-btn {
-    align-self: flex-end;
-  }
-
-  /* FARMACÉUTICO */
-  .farma-widget {
-    position: static;
-    transform: none;
-    justify-content: center;
-    margin: 10px 0;
-  }
-
-  .farma-img {
-    width: 70px;
-    min-width: 70px;
-    max-width: 70px;
-  }
-
-  /* BURBUJA */
-  .speech {
-    width: 160px;
-    height: auto;
-    font-size: 11px;
-    padding: 8px;
-  }
-
-  /* PRODUCTOS */
-  .productos {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 10px;
-    gap: 10px;
-  }
-
-  .card img {
-    height: 120px;
-  }
-
-  /* CARRITO */
-  .panel-carrito {
-    width: 100%;
-  }
-
-  /* ITEMS CARRITO */
-  .item-carrito {
-    flex-direction: row;
-    align-items: center;
-  }
-
 }
 
-/* =========================
-📱 MÓVILES PEQUEÑOS
-========================= */
-@media (max-width: 480px) {
-
-  .productos {
-    grid-template-columns: 1fr;
-  }
-
-  .speech {
-    width: 140px;
-    font-size: 10px;
-  }
-
-  .farma-img {
-    width: 60px;
-  }
-
+function cerrarLogin(){
+  loginBox.classList.remove("show");
 }
+</script>
+
+<!-- 🔥 FIREBASE FUNCIONAL -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBabC4F_6_pEq3Br00KCDSi-z3Y6Vug1e4",
+  authDomain: "vitalmeddeoccidente.firebaseapp.com",
+  projectId: "vitalmeddeoccidente",
+  storageBucket: "vitalmeddeoccidente.firebasestorage.app",
+  messagingSenderId: "824222646050",
+  appId: "1:824222646050:web:ebc6bd51fb855e9e3cef7b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.loginFirebase = function(){
+  signInWithEmailAndPassword(auth,email.value,password.value)
+  .then(user=>{
+    localStorage.setItem("usuario", user.user.email);
+    window.location = "pedidos.html";
+  })
+  .catch(e=>alert(e.message));
+}
+</script>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Pedidos</title>
+
+<style>
+body{font-family:Arial;background:#eef2f0;margin:0;}
+.header{background:#2e6e3a;color:white;padding:15px;text-align:center;}
+.container{padding:20px;}
+.form,.pedido{background:white;padding:15px;border-radius:10px;margin-bottom:10px;}
+input,textarea{width:100%;margin:5px 0;padding:10px;}
+button{padding:10px;background:#2e6e3a;color:white;border:none;border-radius:8px;}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-  <h2>🌿 Médicas de Occidente</h2>
-
-  <div class="menu">
-    <button class="activo" onclick="filtrar('todos',this)">Todos</button>
-    <button onclick="filtrar('suplemento',this)">Suplementos</button>
-    <button onclick="filtrar('malteada',this)">Malteadas</button>
-    <button onclick="filtrar('vitamina',this)">Vitaminas</button>
-  </div>
-
-  <div class="carrito-btn" onclick="abrirCarrito()" id="carrito">🛒 0</div>
+<h2>📦 Pedidos</h2>
 </div>
 
-<div class="banner">
-  <div class="farma-widget">
-    <img src="farmaceuta.png" class="farma-img">
-    <div class="speech" id="farma-text">Hola 👋</div>
-  </div>
-  <img src="imagen.png">
+<div class="container">
+
+<div class="form">
+<input id="cliente" placeholder="Cliente">
+<textarea id="productos" placeholder="Productos"></textarea>
+<textarea id="obs" placeholder="Observaciones"></textarea>
+<button onclick="crearPedido()">Enviar Pedido</button>
 </div>
 
-<div class="productos" id="productos"></div>
-<div class="toast-container" id="toastContainer"></div>
-<div class="overlay" id="overlay" onclick="cerrarCarrito()"></div>
+<div id="lista"></div>
 
-<div class="panel-carrito" id="panel">
-  <div class="cerrar-carrito" onclick="cerrarCarrito()">✖</div>
-  <div class="contenido-carrito" id="lista"></div>
-  <div class="footer-carrito">
-    <div id="total">Total: $0</div>
-    <button class="vaciar" onclick="vaciarCarrito()">Vaciar carrito</button>
-    <button class="finalizar" onclick="enviarWhatsApp()">Finalizar pedido por WhatsApp</button>
-  </div>
 </div>
 
-<script>
-// PRODUCTOS
-let productos=[
-{nombre:"Proteína Natural",precio:25,img:"wheyprot.jpg",categoria:"suplemento"},
-{nombre:"Ben 10 Malteada",precio:18,img:"ben10.jpg",categoria:"malteada"},
-{nombre:"Citrato de Magnesio",precio:12,img:"citratom.jpg",categoria:"vitamina"},
-{nombre:"Citrato de Potasio",precio:15,img:"citratop.jpg",categoria:"vitamina"},
-{nombre:"Calsumag",precio:10,img:"calsumag.jpg",categoria:"suplemento"}
-];
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-let carrito=[];
+const firebaseConfig = {
+  apiKey: "AIzaSyBabC4E_6_pEq3Br00KCDSi-z3Y6Vugle4",
+  authDomain: "vitalmeddeoccidente.firebaseapp.com",
+  projectId: "vitalmeddeoccidente",
+  storageBucket: "vitalmeddeoccidente.appspot.com",
+  messagingSenderId: "824222646050",
+  appId: "1:824222646050:web:ebc6bd51fb855e9e3cef7b"
+};
 
-function render(lista){
-let cont=document.getElementById("productos");
-cont.innerHTML="";
-lista.forEach(p=>{
-cont.innerHTML+=`
-<div class="card">
-<img src="${p.img}">
-<h3>${p.nombre}</h3>
-<p>$${p.precio}</p>
-<button onclick="agregar('${p.nombre}',${p.precio},'${p.img}')">Agregar</button>
-</div>`;
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const usuario = localStorage.getItem("usuario");
+
+// CREAR PEDIDO
+window.crearPedido = async function(){
+  if(!usuario){
+    alert("No hay sesión");
+    return;
+  }
+
+  await addDoc(collection(db,"pedidos"),{
+    cliente: cliente.value,
+    productos: productos.value,
+    obs: obs.value,
+    vendedor: usuario,
+    fecha: Date.now()
+  });
+
+  alert("Pedido guardado");
+
+  cliente.value="";
+  productos.value="";
+  obs.value="";
+}
+
+// LISTAR PEDIDOS
+const q = query(collection(db,"pedidos"), orderBy("fecha","desc"));
+
+onSnapshot(q,(snap)=>{
+  lista.innerHTML="";
+
+  snap.forEach(doc=>{
+    let p = doc.data();
+
+    // 🔥 ADMIN VE TODO
+    if(usuario !== "adminvm@gmail.com" && p.vendedor !== usuario) return;
+
+    lista.innerHTML += `
+    <div class="pedido">
+      <b>${p.cliente}</b><br>
+      ${p.productos}<br>
+      <small>${p.vendedor}</small>
+    </div>`;
+  });
 });
-}
-
-function filtrar(cat,btn){
-document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("activo"));
-btn.classList.add("activo");
-if(cat==="todos") render(productos);
-else render(productos.filter(p=>p.categoria===cat));
-}
-
-function agregar(nombre,precio,img){
-let e=carrito.find(p=>p.nombre===nombre);
-if(e) e.cantidad++;
-else carrito.push({nombre,precio,img,cantidad:1});
-actualizar();
-mostrarToast(nombre,img);
-}
-
-function actualizar(){
-let total=0;
-let lista=document.getElementById("lista");
-lista.innerHTML="";
-let cantidadTotal=0;
-
-carrito.forEach(p=>{
-total+=p.precio*p.cantidad;
-cantidadTotal+=p.cantidad;
-lista.innerHTML+=`
-<div class="item-carrito">
-<img src="${p.img}">
-<div>${p.nombre}<br>$${p.precio} x ${p.cantidad}</div>
-</div>`;
-});
-
-document.getElementById("total").innerText="Total: $"+total;
-document.getElementById("carrito").innerText="🛒 "+cantidadTotal;
-}
-
-function abrirCarrito(){
-panel.classList.add("activo");
-overlay.classList.add("activo");
-}
-
-function cerrarCarrito(){
-panel.classList.remove("activo");
-overlay.classList.remove("activo");
-}
-
-function vaciarCarrito(){
-carrito=[];
-actualizar();
-}
-
-function enviarWhatsApp(){
-let msg="Pedido:%0A";
-carrito.forEach(p=>{
-msg+=`- ${p.nombre} x${p.cantidad}%0A`;
-});
-window.open(`https://wa.me/573000000000?text=${msg}`);
-}
-
-function mostrarToast(nombre,img){
-let cont=document.getElementById("toastContainer");
-let toast=document.createElement("div");
-toast.className="toast";
-toast.innerHTML=`<img src="${img}"><div><strong>${nombre}</strong><br>Agregado</div>`;
-cont.appendChild(toast);
-setTimeout(()=>toast.classList.add("show"),50);
-setTimeout(()=>toast.remove(),2000);
-}
-
-// FARMACÉUTICO
-const numeroWhatsApp="573000000000";
-
-const preguntas=[
-"¿Qué síntoma tienes?",
-"¿Desde cuándo?",
-"¿Tomas algún medicamento?",
-"👉 Toca aquí para recibir asesoría personalizada"
-];
-
-let i=0;
-const text=document.getElementById("farma-text");
-const farma=document.querySelector(".farma-widget");
-
-function nextQuestion(){
-text.style.opacity=0;
-setTimeout(()=>{
-text.textContent=preguntas[i];
-text.style.opacity=1;
-i++;
-if(i<preguntas.length){
-setTimeout(nextQuestion,3000);
-}
-},300);
-}
-
-setTimeout(nextQuestion,1000);
-
-farma.addEventListener("click",()=>{
-window.open(`https://wa.me/${numeroWhatsApp}?text=Hola quiero asesoría`);
-});
-
-render(productos);
 </script>
+
+</body>
+</html>
 
 </body>
 </html>

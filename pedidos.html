@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Pedidos</title>
+
+<style>
+body{font-family:Arial;background:#eef2f0;margin:0;}
+.header{background:#2e6e3a;color:white;padding:15px;text-align:center;}
+.container{padding:20px;}
+.form,.pedido{background:white;padding:15px;border-radius:10px;margin-bottom:10px;}
+input,textarea{width:100%;margin:5px 0;padding:10px;}
+button{padding:10px;background:#2e6e3a;color:white;border:none;border-radius:8px;}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h2>📦 Pedidos</h2>
+</div>
+
+<div class="container">
+
+<div class="form">
+<input id="cliente" placeholder="Cliente">
+<textarea id="productos" placeholder="Productos"></textarea>
+<textarea id="obs" placeholder="Observaciones"></textarea>
+<button onclick="crearPedido()">Enviar Pedido</button>
+</div>
+
+<div id="lista"></div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBabC4E_6_pEq3Br00KCDSi-z3Y6Vugle4",
+  authDomain: "vitalmeddeoccidente.firebaseapp.com",
+  projectId: "vitalmeddeoccidente",
+  storageBucket: "vitalmeddeoccidente.appspot.com",
+  messagingSenderId: "824222646050",
+  appId: "1:824222646050:web:ebc6bd51fb855e9e3cef7b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const usuario = localStorage.getItem("usuario");
+
+// CREAR PEDIDO
+window.crearPedido = async function(){
+  if(!usuario){
+    alert("No hay sesión");
+    return;
+  }
+
+  await addDoc(collection(db,"pedidos"),{
+    cliente: cliente.value,
+    productos: productos.value,
+    obs: obs.value,
+    vendedor: usuario,
+    fecha: Date.now()
+  });
+
+  alert("Pedido guardado");
+
+  cliente.value="";
+  productos.value="";
+  obs.value="";
+}
+
+// LISTAR PEDIDOS
+const q = query(collection(db,"pedidos"), orderBy("fecha","desc"));
+
+onSnapshot(q,(snap)=>{
+  lista.innerHTML="";
+
+  snap.forEach(doc=>{
+    let p = doc.data();
+
+    // 🔥 ADMIN VE TODO
+    if(usuario !== "adminvm@gmail.com" && p.vendedor !== usuario) return;
+
+    lista.innerHTML += `
+    <div class="pedido">
+      <b>${p.cliente}</b><br>
+      ${p.productos}<br>
+      <small>${p.vendedor}</small>
+    </div>`;
+  });
+});
+</script>
+
+</body>
+</html>
