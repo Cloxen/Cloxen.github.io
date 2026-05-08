@@ -6,11 +6,70 @@
 
 <style>
 body{font-family:Arial;background:#eef2f0;margin:0;}
-.header{background:#2e6e3a;color:white;padding:15px;text-align:center;}
+.header{
+  background:#2e6e3a;
+  color:white;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+}
+
 .container{padding:20px;}
-.form,.pedido{background:white;padding:15px;border-radius:10px;margin-bottom:10px;}
-input,textarea{width:100%;margin:5px 0;padding:10px;}
-button{padding:10px;background:#2e6e3a;color:white;border:none;border-radius:8px;}
+
+.form,.pedido{
+  background:white;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+
+input,textarea{
+  padding:10px;
+  margin:5px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+button{
+  padding:10px;
+  background:#2e6e3a;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.logout{background:red;}
+
+.sugerencias{
+  background:white;
+  border:1px solid #ccc;
+}
+
+.sugerencia{
+  padding:8px;
+  cursor:pointer;
+}
+
+.sugerencia:hover{background:#eee;}
+
+.item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#f5f5f5;
+  padding:8px;
+  margin-top:5px;
+}
+
+.item img{width:40px;}
+
+.eliminar{
+  background:red;
+  color:white;
+  border:none;
+  border-radius:5px;
+}
 </style>
 </head>
 
@@ -18,15 +77,28 @@ button{padding:10px;background:#2e6e3a;color:white;border:none;border-radius:8px
 
 <div class="header">
 <h2>📦 Pedidos</h2>
+<button class="logout" onclick="cerrarSesion()">Salir</button>
 </div>
 
 <div class="container">
 
 <div class="form">
-<input id="cliente" placeholder="Cliente">
-<textarea id="productos" placeholder="Productos"></textarea>
-<textarea id="obs" placeholder="Observaciones"></textarea>
-<button onclick="crearPedido()">Enviar Pedido</button>
+
+<input id="cliente" placeholder="Cliente" style="width:100%">
+
+<div style="display:flex; gap:10px;">
+  <input id="buscador" placeholder="Buscar producto" style="flex:1;">
+  <input id="cantidadInput" type="number" value="1" min="1" style="width:80px">
+  <button onclick="agregarSeleccionado()">Agregar</button>
+</div>
+
+<div id="sugerencias" class="sugerencias"></div>
+<div id="seleccionados"></div>
+
+<textarea id="obs" placeholder="Observaciones" style="width:100%"></textarea>
+
+<button onclick="crearPedido()">Guardar Pedido</button>
+
 </div>
 
 <div id="lista"></div>
@@ -35,7 +107,7 @@ button{padding:10px;background:#2e6e3a;color:white;border:none;border-radius:8px
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBabC4E_6_pEq3Br00KCDSi-z3Y6Vugle4",
@@ -51,16 +123,116 @@ const db = getFirestore(app);
 
 const usuario = localStorage.getItem("usuario");
 
-// CREAR PEDIDO
-window.crearPedido = async function(){
-  if(!usuario){
-    alert("No hay sesión");
+// PRODUCTOS
+const productos = [
+{nombre:"Proteína Natural",img:"wheyprot.jpg"},
+{nombre:"Ben 10 Malteada",img:"ben10.jpg"},
+{nombre:"Citrato de Magnesio",img:"citratom.jpg"},
+{nombre:"Citrato de Potasio",img:"citratop.jpg"},
+{nombre:"Calsumag",img:"calsumag.jpg"}
+];
+
+let seleccionados = [];
+let productoSeleccionado = null;
+
+const buscador = document.getElementById("buscador");
+const sugerencias = document.getElementById("sugerencias");
+const seleccionadosDiv = document.getElementById("seleccionados");
+const lista = document.getElementById("lista");
+
+// AUTOCOMPLETE
+buscador.addEventListener("input",()=>{
+  sugerencias.innerHTML="";
+  let val = buscador.value.toLowerCase();
+
+  productos.forEach(p=>{
+    if(p.nombre.toLowerCase().includes(val)){
+      let div=document.createElement("div");
+      div.className="sugerencia";
+      div.textContent=p.nombre;
+
+      div.onclick=()=>{
+        productoSeleccionado = p;
+        buscador.value = p.nombre;
+        sugerencias.innerHTML="";
+      };
+
+      sugerencias.appendChild(div);
+    }
+  });
+});
+
+// AGREGAR PRODUCTO
+window.agregarSeleccionado = function(){
+
+  if(!productoSeleccionado){
+    alert("Selecciona un producto");
     return;
   }
 
+  let cantidad = parseInt(document.getElementById("cantidadInput").value);
+
+  if(cantidad <= 0 || isNaN(cantidad)){
+    alert("Cantidad inválida");
+    return;
+  }
+
+  let existe = seleccionados.find(x=>x.nombre===productoSeleccionado.nombre);
+
+  if(existe){
+    existe.cantidad += cantidad;
+  }else{
+    seleccionados.push({...productoSeleccionado,cantidad:cantidad});
+  }
+
+  productoSeleccionado=null;
+  buscador.value="";
+  document.getElementById("cantidadInput").value = 1;
+
+  render();
+};
+
+// RENDER
+function render(){
+  seleccionadosDiv.innerHTML="";
+
+  seleccionados.forEach((p,i)=>{
+    let div=document.createElement("div");
+    div.className="item";
+
+    div.innerHTML=`
+      <img src="${p.img}">
+      ${p.nombre}
+      <input type="number" value="${p.cantidad}" min="1" style="width:60px">
+      <button class="eliminar">X</button>
+    `;
+
+    div.querySelector("input").onchange=(e)=>{
+      seleccionados[i].cantidad=parseInt(e.target.value);
+    };
+
+    div.querySelector("button").onclick=()=>{
+      seleccionados.splice(i,1);
+      render();
+    };
+
+    seleccionadosDiv.appendChild(div);
+  });
+}
+
+// GUARDAR PEDIDO
+window.crearPedido = async function(){
+
+  if(seleccionados.length===0){
+    alert("Agrega productos");
+    return;
+  }
+
+  if(!confirm("¿Guardar pedido?")) return;
+
   await addDoc(collection(db,"pedidos"),{
     cliente: cliente.value,
-    productos: productos.value,
+    productos: seleccionados,
     obs: obs.value,
     vendedor: usuario,
     fecha: Date.now()
@@ -68,31 +240,44 @@ window.crearPedido = async function(){
 
   alert("Pedido guardado");
 
-  cliente.value="";
-  productos.value="";
-  obs.value="";
+  seleccionados=[];
+  render();
 }
 
-// LISTAR PEDIDOS
+// 🔥 LISTAR CORRECTO
 const q = query(collection(db,"pedidos"), orderBy("fecha","desc"));
 
 onSnapshot(q,(snap)=>{
   lista.innerHTML="";
 
-  snap.forEach(doc=>{
-    let p = doc.data();
+  snap.forEach(d=>{
+    let p=d.data();
 
-    // 🔥 ADMIN VE TODO
-    if(usuario !== "adminvm@gmail.com" && p.vendedor !== usuario) return;
+    if(usuario!=="adminvm@gmail.com" && p.vendedor!==usuario) return;
 
-    lista.innerHTML += `
+    let fecha = new Date(p.fecha).toLocaleString();
+
+    lista.innerHTML+=`
     <div class="pedido">
       <b>${p.cliente}</b><br>
-      ${p.productos}<br>
-      <small>${p.vendedor}</small>
+      ${p.productos.map(x=>x.nombre+" x"+x.cantidad).join(", ")}<br>
+      <small>${fecha}</small><br>
+      <small>${p.vendedor}</small><br>
+      ${usuario==="adminvm@gmail.com" ? `<button onclick="eliminar('${d.id}')">Eliminar</button>`:""}
     </div>`;
   });
 });
+
+// ELIMINAR
+window.eliminar = async function(id){
+  await deleteDoc(doc(db,"pedidos",id));
+}
+
+// LOGOUT
+window.cerrarSesion = function(){
+  localStorage.removeItem("usuario");
+  window.location="index.html";
+}
 </script>
 
 </body>
