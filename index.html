@@ -5,22 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VitalMedic de Occidente</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #eef2f0;
+
+*{
+  box-sizing:border-box;
 }
 
-/* 🔐 LOGIN OCULTO (NO AFECTA DISEÑO) */
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:#eef2f0;
+  overflow-x:hidden;
+}
+
+/* LOGIN */
 .login-bar{
   position:fixed;
   top:-100px;
   left:50%;
   transform:translateX(-50%);
-  background: linear-gradient(90deg,#2e6e3a,#4f9b61);
+  background:linear-gradient(90deg,#2e6e3a,#4f9b61);
   padding:10px;
   border-radius:30px;
   display:flex;
@@ -38,6 +44,7 @@ body {
   padding:6px;
   border-radius:20px;
   border:none;
+  outline:none;
 }
 
 .login-bar button{
@@ -49,40 +56,45 @@ body {
 }
 
 .close-login{
-  background:red;
+  background:red !important;
   color:white;
-  border:none;
-  border-radius:50%;
+  border-radius:50% !important;
   width:25px;
   height:25px;
-  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  line-height:0;
   font-size:14px;
+  cursor:pointer;
 }
 
 /* HEADER */
-.header {
+.header{
   background:#2e6e3a;
   color:white;
   padding:15px;
   text-align:center;
 }
 
-.header h2 {
-  font-family: 'Playfair Display', serif;
+.header h2{
+  margin:0;
+  font-family:'Playfair Display',serif;
 }
 
 /* BANNER */
-.banner {
-  position: relative;
+.banner{
+  position:relative;
 }
 
-.banner img {
+.banner img{
   width:100%;
   display:block;
 }
 
 /* FARMACÉUTICO */
-.farma-widget {
+.farma-widget{
   position:absolute;
   left:20px;
   top:50%;
@@ -93,54 +105,513 @@ body {
   z-index:5;
 }
 
-.farma-img {
+.farma-img{
   width:80px !important;
 }
 
-/* BURBUJA */
-.speech {
-  position:relative;
+.speech{
   background:white;
   padding:8px;
   border-radius:10px;
   width:140px;
-  height:45px;
+  min-height:45px;
   font-size:11px;
   display:flex;
   align-items:center;
   justify-content:center;
+  text-align:center;
 }
 
 /* PRODUCTOS */
-.productos {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+.productos{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
   gap:20px;
   padding:20px;
 }
 
-.card {
+/* CARD */
+.card{
+  width:220px;
   background:white;
-  border-radius:15px;
+  border-radius:18px;
   padding:15px;
   text-align:center;
+  transition:0.25s;
+  box-shadow:0 6px 15px rgba(0,0,0,0.08);
 }
 
-.card img {
+.card:hover{
+  transform:translateY(-5px);
+}
+
+/* IMAGEN PRODUCTO */
+.card img{
   width:100%;
-  height:160px;
-  object-fit:cover;
+  height:220px;
+  object-fit:contain;
+  object-position:center;
+  border-radius:14px;
+  background:white;
+  padding:6px;
+  display:block;
+  cursor:pointer;
 }
 
-.precio {
+.precio{
   color:#2e6e3a;
   font-weight:bold;
+  font-size:18px;
 }
+
+/* BOTON CARD */
+.add-btn{
+  width:100%;
+  margin-top:12px;
+  background:#25D366;
+  color:white;
+  border:none;
+  padding:12px;
+  border-radius:30px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.add-btn:hover{
+  transform:scale(1.03);
+}
+
+/* POPUP */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  visibility:hidden;
+  transition:0.25s;
+  z-index:99999;
+  padding:20px;
+}
+
+.popup.show{
+  opacity:1;
+  visibility:visible;
+}
+
+.popup-box{
+  background:white;
+  width:100%;
+  max-width:700px;
+  border-radius:25px;
+  overflow:hidden;
+  transform:translateY(20px);
+  transition:0.25s;
+  position:relative;
+}
+
+.popup.show .popup-box{
+  transform:translateY(0);
+}
+
+.popup-img-container{
+  width:100%;
+  height:400px;
+  overflow:auto;
+  background:#f5f5f5;
+  text-align:center;
+  padding:20px;
+}
+
+.popup-img-container::-webkit-scrollbar{
+  width:8px;
+  height:8px;
+}
+
+.popup-img-container::-webkit-scrollbar-thumb{
+  background:#bbb;
+  border-radius:20px;
+}
+
+.popup-img{
+  width:70%;
+  max-width:70%;
+  display:block;
+  margin:auto;
+  object-fit:contain;
+  cursor:zoom-in;
+  transition:0.3s;
+}
+
+.popup-img.zoom{
+  width:1100px;
+  max-width:none;
+  cursor:zoom-out;
+}
+
+.popup-content{
+  padding:25px;
+}
+
+.popup-content h2{
+  color:#2e6e3a;
+  margin-bottom:10px;
+}
+
+.popup-precio{
+  font-size:24px;
+  font-weight:600;
+  margin-bottom:15px;
+}
+
+.popup-beneficios{
+  background:#f7f7f7;
+  padding:15px;
+  border-radius:15px;
+  line-height:1.5;
+}
+
+.add-cart-btn{
+  margin-top:20px;
+  width:100%;
+  background:#2e6e3a;
+  color:white;
+  border:none;
+  padding:14px;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.cerrar-popup{
+  position:absolute;
+  top:15px;
+  right:15px;
+  background:white;
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  font-size:18px;
+  z-index:10;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:white;
+  border-radius:18px;
+  padding:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.18);
+  z-index:999999;
+  opacity:0;
+  transform:translateX(120%);
+  transition:0.35s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(0);
+}
+
+.toast img{
+  width:55px;
+  height:55px;
+  object-fit:contain;
+  background:#f5f5f5;
+  border-radius:12px;
+  padding:5px;
+}
+
+.toast-text{
+  font-size:14px;
+}
+
+.toast-text b{
+  color:#2e6e3a;
+}
+
+/* CARRITO */
+.cart-btn{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  background:#2e6e3a;
+  color:white;
+  border:none;
+  font-size:28px;
+  cursor:pointer;
+  z-index:9999;
+  box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+
+.cart-count{
+  position:absolute;
+  top:-5px;
+  right:-5px;
+  background:red;
+  color:white;
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.cart-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  opacity:0;
+  visibility:hidden;
+  transition:0.25s;
+  z-index:9998;
+}
+
+.cart-overlay.show{
+  opacity:1;
+  visibility:visible;
+}
+
+.cart{
+  position:fixed;
+  top:0;
+  right:-420px;
+  width:400px;
+  max-width:100%;
+  height:100%;
+  background:white;
+  z-index:9999;
+  transition:0.3s;
+  display:flex;
+  flex-direction:column;
+  box-shadow:-5px 0 20px rgba(0,0,0,0.15);
+}
+
+.cart.show{
+  right:0;
+}
+
+.cart-header{
+  background:#2e6e3a;
+  color:white;
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.close-cart{
+  background:white;
+  color:#2e6e3a;
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  border:none;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.cart-items{
+  flex:1;
+  overflow:auto;
+  padding:15px;
+}
+
+.cart-item{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+  background:#f7f7f7;
+  border-radius:14px;
+  padding:10px;
+}
+
+.cart-item img{
+  width:70px;
+  height:70px;
+  object-fit:contain;
+  background:white;
+  border-radius:10px;
+  padding:5px;
+}
+
+.cart-info{
+  flex:1;
+}
+
+.cart-actions{
+  display:flex;
+  gap:6px;
+  margin-top:8px;
+  align-items:center;
+}
+
+.cart-actions button{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  color:white;
+  background:#2e6e3a;
+}
+
+.remove-btn{
+  background:#ff4d4d !important;
+}
+
+.cart-footer{
+  padding:20px;
+  border-top:1px solid #eee;
+}
+
+.total{
+  font-size:22px;
+  font-weight:700;
+  color:#2e6e3a;
+  margin-bottom:15px;
+}
+
+.vaciar-btn{
+  width:100%;
+  background:#ff4d4d;
+  color:white;
+  border:none;
+  padding:13px;
+  border-radius:15px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  margin-bottom:10px;
+  transition:0.25s;
+}
+
+.vaciar-btn:hover{
+  transform:scale(1.02);
+}
+
+.whatsapp-btn{
+  width:100%;
+  background:#25D366;
+  color:white;
+  border:none;
+  padding:15px;
+  border-radius:15px;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+
+  .login-bar{
+    width:95%;
+    padding:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .login-bar input{
+    width:100%;
+  }
+
+  .productos{
+    padding:15px;
+    gap:15px;
+  }
+
+  .card{
+    width:100%;
+    max-width:350px;
+  }
+
+  .card img{
+    height:200px;
+  }
+
+  .farma-widget{
+    left:10px;
+  }
+
+  .farma-img{
+    width:55px !important;
+  }
+
+  .speech{
+    width:100px;
+    font-size:10px;
+    padding:6px;
+  }
+
+  .popup{
+    padding:10px;
+  }
+
+  .popup-box{
+    max-height:95vh;
+    overflow:auto;
+  }
+
+  .popup-img-container{
+    height:250px;
+    padding:10px;
+  }
+
+  .popup-img{
+    width:100%;
+    max-width:100%;
+  }
+
+  .popup-content{
+    padding:18px;
+  }
+
+  .cart{
+    width:100%;
+  }
+
+  .toast{
+    right:10px;
+    left:10px;
+    width:auto;
+  }
+
+  .cart-btn{
+    width:60px;
+    height:60px;
+    font-size:24px;
+    bottom:20px;
+    right:20px;
+  }
+
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
 <div class="login-bar" id="loginBox">
   <input id="email" placeholder="Correo vendedor">
   <input id="password" type="password" placeholder="Contraseña">
@@ -148,10 +619,12 @@ body {
   <button class="close-login" onclick="cerrarLogin()">✖</button>
 </div>
 
+<!-- HEADER -->
 <div class="header">
   <h2>🌿 VitalMedic de Occidente</h2>
 </div>
 
+<!-- BANNER -->
 <div class="banner" onclick="activarLogin()">
   <div class="farma-widget">
     <img src="farmaceuta.png" class="farma-img">
@@ -160,34 +633,187 @@ body {
   <img src="imagen.png">
 </div>
 
+<!-- PRODUCTOS -->
 <div class="productos" id="productos"></div>
 
+<!-- POPUP -->
+<div class="popup" id="popup">
+
+<button class="cerrar-popup" onclick="cerrarPopup()">✖</button>
+
+<div class="popup-box">
+
+<div class="popup-img-container">
+<img id="popupImg" class="popup-img">
+</div>
+
+<div class="popup-content">
+
+<h2 id="popupNombre"></h2>
+
+<div class="popup-precio" id="popupPrecio"></div>
+
+<div class="popup-beneficios">
+<strong>Beneficios:</strong>
+<p id="popupBeneficios"></p>
+</div>
+
+<button class="add-cart-btn" onclick="agregarCarrito()">
+Agregar al carrito
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+
+<img id="toastImg">
+
+<div class="toast-text">
+<b id="toastNombre"></b>
+<div>Agregado al carrito</div>
+</div>
+
+</div>
+
+<!-- BOTON -->
+<button class="cart-btn" onclick="toggleCart()">
+🛒
+<div class="cart-count" id="cartCount">0</div>
+</button>
+
+<!-- OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="cerrarCarrito()"></div>
+
+<!-- CARRITO -->
+<div class="cart" id="cart">
+
+<div class="cart-header">
+<h3>Mi carrito</h3>
+<button class="close-cart" onclick="cerrarCarrito()">✖</button>
+</div>
+
+<div class="cart-items" id="cartItems"></div>
+
+<div class="cart-footer">
+
+<div class="total" id="cartTotal">
+Total: $0
+</div>
+
+<button class="vaciar-btn" onclick="vaciarCarrito()">
+Vaciar carrito
+</button>
+
+<button class="whatsapp-btn" onclick="finalizarPedido()">
+Finalizar pedido
+</button>
+
+</div>
+
+</div>
+
 <script>
-// PRODUCTOS
+
+/* PRODUCTOS */
 let productos=[
-{nombre:"Proteína Natural",precio:25,img:"wheyprot.jpg"},
-{nombre:"Ben 10 Malteada",precio:18,img:"ben10.jpg"},
-{nombre:"Citrato de Magnesio",precio:12,img:"citratom.jpg"},
-{nombre:"Citrato de Potasio",precio:15,img:"citratop.jpg"},
-{nombre:"Calsumag",precio:10,img:"calsumag.jpg"}
+
+{
+nombre:"Proteína Natural",
+precio:25,
+img:"wheyprot.png",
+beneficios:"Ayuda al crecimiento muscular, recuperación física y mejora el rendimiento."
+},
+
+{
+nombre:"Ben 10 Malteada",
+precio:18,
+img:"Ben10.png",
+beneficios:"Aporta vitaminas, energía y minerales esenciales."
+},
+
+{
+nombre:"Citrato de Magnesio",
+precio:12,
+img:"Citratom.png",
+beneficios:"Ayuda al sistema muscular y nervioso."
+},
+
+{
+nombre:"Citrato de Potasio",
+precio:15,
+img:"Citratop.png",
+beneficios:"Contribuye al equilibrio electrolítico."
+},
+
+{
+nombre:"Calsumag",
+precio:10,
+img:"Calsumag800g.jpeg",
+beneficios:"Ideal para fortalecer huesos y articulaciones."
+},
+
+{
+nombre:"Colasteel",
+precio:22,
+img:"Colasteel.jpeg",
+beneficios:"Ayuda a la salud cardiovascular y cerebral."
+},
+
+{
+nombre:"GreenFit",
+precio:14,
+img:"Greenfit700g.png",
+beneficios:"Fortalece el sistema inmune y aporta antioxidantes."
+}
+
 ];
 
+let carrito=[];
+let productoActual=null;
+
+/* RENDER */
 function render(){
+
 let cont=document.getElementById("productos");
+
 cont.innerHTML="";
+
 productos.forEach(p=>{
+
 cont.innerHTML+=`
 <div class="card">
-<img src="${p.img}">
+
+<img 
+src="${p.img}"
+onclick='abrirPopup(${JSON.stringify(p)})'
+>
+
 <h3>${p.nombre}</h3>
+
 <p class="precio">$${p.precio}</p>
-<p>Disponible</p>
-</div>`;
+
+<button
+class="add-btn"
+onclick='agregarDirecto(${JSON.stringify(p)})'
+>
+Agregar al carrito
+</button>
+
+</div>
+`;
+
 });
+
 }
+
 render();
 
-// FARMACÉUTICO
+/* FARMACÉUTICO */
 const preguntas=[
 "¿Qué síntoma tienes?",
 "Te ayudamos a elegir el mejor producto",
@@ -195,57 +821,301 @@ const preguntas=[
 ];
 
 let i=0;
+
 const text=document.getElementById("farma-text");
 
 function nextQuestion(){
+
 text.textContent=preguntas[i];
+
 i++;
+
 if(i<preguntas.length){
 setTimeout(nextQuestion,3000);
 }
+
 }
+
 setTimeout(nextQuestion,2000);
 
-// LOGIN SECRETO
-let clicks = 0;
+/* LOGIN */
+let clicks=0;
+
 function activarLogin(){
-  clicks++;
-  if(clicks >= 3){
-    document.getElementById("loginBox").classList.add("show");
-    clicks = 0;
-  }
+
+clicks++;
+
+if(clicks>=3){
+loginBox.classList.add("show");
+clicks=0;
+}
+
 }
 
 function cerrarLogin(){
-  document.getElementById("loginBox").classList.remove("show");
+loginBox.classList.remove("show");
 }
+
+/* POPUP */
+function abrirPopup(p){
+
+productoActual=p;
+
+popupImg.classList.remove("zoom");
+
+popupImg.src=p.img;
+popupNombre.innerText=p.nombre;
+popupPrecio.innerText="$"+p.precio;
+popupBeneficios.innerText=p.beneficios;
+
+popup.classList.add("show");
+
+}
+
+function cerrarPopup(){
+
+popup.classList.remove("show");
+
+popupImg.classList.remove("zoom");
+
+}
+
+/* ZOOM */
+popupImg.addEventListener("click",()=>{
+popupImg.classList.toggle("zoom");
+});
+
+/* TOAST */
+function mostrarToast(p){
+
+toastImg.src=p.img;
+toastNombre.innerText=p.nombre;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+toast.classList.remove("show");
+},2200);
+
+}
+
+/* AGREGAR DIRECTO */
+function agregarDirecto(p){
+
+let existe=carrito.find(x=>x.nombre===p.nombre);
+
+if(existe){
+existe.cantidad++;
+}else{
+carrito.push({
+...p,
+cantidad:1
+});
+}
+
+actualizarCarrito();
+
+mostrarToast(p);
+
+}
+
+/* AGREGAR POPUP */
+function agregarCarrito(){
+
+let existe=carrito.find(x=>x.nombre===productoActual.nombre);
+
+if(existe){
+existe.cantidad++;
+}else{
+carrito.push({
+...productoActual,
+cantidad:1
+});
+}
+
+actualizarCarrito();
+
+mostrarToast(productoActual);
+
+cerrarPopup();
+
+}
+
+/* ACTUALIZAR */
+function actualizarCarrito(){
+
+cartItems.innerHTML="";
+
+let total=0;
+let cantidad=0;
+
+carrito.forEach((p,i)=>{
+
+total+=p.precio*p.cantidad;
+cantidad+=p.cantidad;
+
+cartItems.innerHTML+=`
+
+<div class="cart-item">
+
+<img src="${p.img}">
+
+<div class="cart-info">
+
+<h4>${p.nombre}</h4>
+
+<p>$${p.precio}</p>
+
+<div class="cart-actions">
+
+<button onclick="menosCarrito(${i})">-</button>
+
+<span>${p.cantidad}</span>
+
+<button onclick="masCarrito(${i})">+</button>
+
+<button class="remove-btn" onclick="eliminarCarrito(${i})">
+✖
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+cartTotal.innerText="Total: $"+total;
+cartCount.innerText=cantidad;
+
+}
+
+function masCarrito(i){
+carrito[i].cantidad++;
+actualizarCarrito();
+}
+
+function menosCarrito(i){
+
+if(carrito[i].cantidad>1){
+carrito[i].cantidad--;
+}
+
+actualizarCarrito();
+
+}
+
+function eliminarCarrito(i){
+carrito.splice(i,1);
+actualizarCarrito();
+}
+
+function vaciarCarrito(){
+
+if(carrito.length===0) return;
+
+if(confirm("¿Vaciar carrito?")){
+
+carrito=[];
+
+actualizarCarrito();
+
+}
+
+}
+
+function toggleCart(){
+cart.classList.toggle("show");
+cartOverlay.classList.toggle("show");
+}
+
+function cerrarCarrito(){
+cart.classList.remove("show");
+cartOverlay.classList.remove("show");
+}
+
+/* WHATSAPP */
+function finalizarPedido(){
+
+if(carrito.length===0){
+alert("El carrito está vacío");
+return;
+}
+
+let mensaje="🌿 *Pedido VitalMedic* %0A%0A";
+
+let total=0;
+
+carrito.forEach(p=>{
+
+let subtotal=p.precio*p.cantidad;
+
+total+=subtotal;
+
+mensaje+=`🛒 ${p.nombre} x${p.cantidad} - $${subtotal}%0A`;
+
+});
+
+mensaje+=`%0A💰 *Total:* $${total}`;
+
+window.open(
+`https://wa.me/573001112233?text=${mensaje}`,
+"_blank"
+);
+
+}
+
 </script>
 
-<!-- 🔥 FIREBASE FUNCIONAL -->
+<!-- FIREBASE -->
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBabC4E_6_pEq3Br00KCDSi-z3Y6Vugle4",
-  authDomain: "vitalmeddeoccidente.firebaseapp.com",
-  projectId: "vitalmeddeoccidente",
-  storageBucket: "vitalmeddeoccidente.appspot.com",
-  messagingSenderId: "824222646050",
-  appId: "1:824222646050:web:ebc6bd51fb855e9e3cef7b"
+apiKey: "AIzaSyBabC4E_6_pEq3Br00KCDSi-z3Y6Vugle4",
+authDomain: "vitalmeddeoccidente.firebaseapp.com",
+projectId: "vitalmeddeoccidente",
+storageBucket: "vitalmeddeoccidente.appspot.com",
+messagingSenderId: "824222646050",
+appId: "1:824222646050:web:ebc6bd51fb855e9e3cef7b"
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
 
-window.loginFirebase = function(){
-  signInWithEmailAndPassword(auth,email.value,password.value)
-  .then(user=>{
-    localStorage.setItem("usuario", user.user.email);
-    window.location = "pedidos.html"; // 🔥 aquí conectamos con pedidos
-  })
-  .catch(e=>alert(e.message));
+window.loginFirebase=function(){
+
+signInWithEmailAndPassword(
+auth,
+email.value,
+password.value
+)
+
+.then(user=>{
+
+localStorage.setItem(
+"usuario",
+user.user.email
+);
+
+window.location="pedidos.html";
+
+})
+
+.catch(e=>alert(e.message));
+
 }
+
 </script>
 
 </body>
